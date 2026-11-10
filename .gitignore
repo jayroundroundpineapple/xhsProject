@@ -1,0 +1,16 @@
+# 环境与密钥
+.env
+cookie*.txt
+*cookie*
+
+# 数据（采集数据本地保存，不上传）
+data/*.csv
+data/*.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 系统文件
+.DS_Store
