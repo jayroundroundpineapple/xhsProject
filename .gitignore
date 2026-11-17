@@ -6,6 +6,8 @@ cookie*.txt
 # 数据（采集数据本地保存，不上传）
 data/*.csv
 data/*.json
+# 例外：笔记发布数据要版本化，这是复盘依据
+!data/notes_log.csv
 
 # Python
 __pycache__/
