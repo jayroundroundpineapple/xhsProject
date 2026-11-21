@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>家电选购内容工作台 · v1</title>
+<style>
+:root{
+  --bg:#f2f4f1; --panel:#ffffff; --ink:#1b2623; --ink2:#4a5a55; --muted:#7b8a85;
+  --line:#dde4df; --accent:#d9562a; --accent2:#fbe9e0; --ok:#2e8b6b; --warn:#b07b16;
+  --dark:#15201e; --shadow:0 1px 3px rgba(20,40,32,.06),0 8px 24px rgba(20,40,32,.05);
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.6 var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+
+/* 顶栏 */
+.top{background:var(--dark);color:#e8efeb;padding:14px 22px 0}
+.top-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.top h1{font-size:18px;letter-spacing:.5px;font-weight:750}
+.top h1 span{color:var(--accent);font-weight:800}
+.top .sub{font-size:12px;color:#9fb0ab}
+.steps{display:flex;gap:8px;margin-top:12px}
+.step{border:0;background:transparent;color:#9fb0ab;padding:8px 16px 10px;border-bottom:3px solid transparent;font-weight:650}
+.step:hover{color:#fff}
+.step.on{color:#fff;border-bottom-color:var(--accent)}
+.step em{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid #576a64;margin-right:6px;font-size:11px}
+.step.on em{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* 三栏 */
+.grid{display:grid;grid-template-columns:296px minmax(420px,1fr) 350px;gap:14px;padding:14px;height:calc(100vh - 104px);min-height:640px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:auto;padding:16px}
+.panel h2{font-size:13px;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:12px;text-transform:uppercase}
+.panel h3{font-size:15px;margin:16px 0 8px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;color:var(--ink2);margin-bottom:5px;font-weight:650}
+.field input[type=text],.field input[type=number],.field select,.field textarea{
+  width:100%;border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:#fcfdfc;outline:none
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:#fff}
+.field textarea{resize:vertical;min-height:64px}
+.hint{font-size:11px;color:var(--muted);margin-top:4px}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{min-width:0}
+.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 12px;font-weight:650;font-size:12px}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(.95);color:#fff}
+.btn.ghost{background:transparent}
+.btn.tiny{padding:3px 8px;font-size:11px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.hide{display:none!important}
+.tagpill{display:inline-block;background:var(--accent2);color:#8a3415;border-radius:20px;padding:2px 9px;font-size:11px;margin:2px 4px 2px 0;font-weight:650}
+.notice{background:#f7f9f7;border-left:3px solid var(--ok);padding:9px 11px;border-radius:5px;font-size:12px;color:var(--ink2);margin:10px 0}
+.notice.warn{background:#fff7ec;border-left-color:var(--warn)}
+.notice b{color:var(--ink)}
+
+/* 中间画布 */
+.stage-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.stage-title h2{margin:0;color:var(--ink);font-size:17px;letter-spacing:0}
+.badge{font-size:11px;background:#eef2ef;border-radius:20px;padding:3px 10px;color:var(--ink2)}
+.quad-wrap{display:grid;grid-template-columns:minmax(260px,1fr) minmax(230px,.9fr);gap:14px;align-items:start}
+svg.quad{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fcfdfc}
+.q-label{font:600 11px var(--sans);fill:var(--muted)}
+.cand{border:1px solid var(--line);border-radius:8px;padding:9px 10px;margin-bottom:8px;background:#fff;cursor:pointer}
+.cand:hover{border-color:var(--accent)}
+.cand.on{border-color:var(--accent);background:#fff8f5;box-shadow:inset 3px 0 0 var(--accent)}
+.cand .t{font-weight:700;font-size:13px}
+.cand .m{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.cand .m b{color:var(--accent)}
+.cand.done{opacity:.55}
+.bar{display:flex;height:22px;border-radius:5px;overflow:hidden;border:1px solid var(--line);margin:6px 0}
+.bar i{display:grid;place-items:center;font-style:normal;font-size:10px;color:#fff;font-weight:700}
+.bar-legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--ink2)}
+.bar-legend b{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.kv div{border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:#fcfdfc}
+.kv span{display:block;font-size:11px;color:var(--muted)}
+.kv b{font-size:17px}
+
+/* 文案工坊 */
+.sec{border:1px solid var(--line);border-radius:8px;padding:11px 13px;margin-bottom:10px;background:#fcfdfc}
+.sec h4{font-size:12px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px}
+.sec p{font-size:13px;line-height:1.75;white-space:pre-wrap}
+.title-opt{border:1px solid var(--line);border-radius:7px;padding:8px 10px;margin-bottom:6px;cursor:pointer;background:#fff}
+.title-opt:hover{border-color:var(--accent)}
+.title-opt.on{border-color:var(--accent);background:#fff8f5}
+.title-opt small{display:block;color:var(--muted);font-size:11px}
+.title-opt strong{font-size:13px}
+
+/* 故事板 */
+.storyboard{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden;cursor:grab}
+.card.drag{opacity:.4}
+.card.over{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent2)}
+.card .topbar{display:flex;align-items:center;justify-content:space-between;background:var(--dark);color:#fff;padding:7px 9px;font-size:11px}
+.card .topbar b{font-size:13px}
+.card .body{padding:9px}
+.card .goal{font-size:12px;font-weight:700;margin-bottom:3px}
+.card .vis{font-size:11px;color:var(--muted);margin-bottom:6px}
+.card .copy{font-size:12px;background:#f7f9f7;border-radius:5px;padding:6px 8px;white-space:pre-wrap;max-height:92px;overflow:hidden}
+.card .mini{font-size:10px;color:var(--muted);margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+.card .mini em{font-style:normal;background:#eef2ef;border-radius:3px;padding:1px 5px}
+.card .mini em.ai{background:#fff0d8;color:#8a5a00}
+.card .ops{display:flex;gap:4px;margin-top:7px}
+.card-detail textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:6px;padding:7px;font-size:12px;margin-top:4px;resize:vertical}
+.card-detail input{width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 7px;font-size:12px;margin-top:3px}
+.card-detail label{display:block;font-size:11px;color:var(--muted);margin-top:7px}
+.chk{display:flex;align-items:center;gap:6px;font-size:12px;margin:5px 0;color:var(--ink2)}
+.chk input{accent-color:var(--accent)}
+
+/* 右栏 */
+.check{border-bottom:1px dashed var(--line);padding:7px 0;font-size:12px}
+.check:last-child{border-bottom:0}
+.check .h{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.check .h b{font-weight:650}
+.check .st{font-weight:750;font-size:11px;border-radius:20px;padding:1px 8px}
+.check .st.ok{background:#e5f5ee;color:var(--ok)}
+.check .st.no{background:#fde9e3;color:var(--accent)}
+.check p{color:var(--muted);font-size:11px;margin-top:2px}
+.preview{font-size:12px;white-space:pre-wrap;background:#fbfcfb;border:1px solid var(--line);border-radius:7px;padding:10px;max-height:220px;overflow:auto}
+
+/* 底部导出 */
+.exportbar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:9px 16px;display:flex;gap:8px;align-items:center;z-index:20;box-shadow:0 -4px 18px rgba(20,40,32,.05)}
+.exportbar .lbl{font-size:12px;color:var(--muted);margin-right:4px}
+.exportbar .spacer{flex:1}
+.exportbar .status{font-size:11px;color:var(--muted)}
+@media(max-width:1180px){.grid{grid-template-columns:1fr;height:auto}.panel{overflow:visible}.quad-wrap,.storyboard{grid-template-columns:1fr 1fr}.exportbar{position:static}}
+@media(max-width:760px){.quad-wrap,.storyboard{grid-template-columns:1fr}.top{padding-top:10px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <h1>家电选购 · 内容工作台 <span>v1</span></h1>
+    <div class="sub">本地离线 · 模板规则生成 · 不接 LLM · 不自动发布 · 配图不显示来源与时间</div>
+  </div>
+  <nav class="steps" id="steps">
+    <button class="step on" data-step="1"><em>1</em>题材雷达</button>
+    <button class="step" data-step="2"><em>2</em>文案工坊</button>
+    <button class="step" data-step="3"><em>3</em>图片编排</button>
+  </nav>
+</header>
+
+<div class="grid">
+  <!-- 左：输入控制 -->
+  <aside class="panel" id="leftPanel">
+    <h2>输入控制</h2>
+
+    <div data-step-pane="1">
+      <div class="field"><label>切口</label><select id="cut"></select></div>
+      <div class="field"><label>目标人群</label><select id="persona"></select></div>
+      <div class="field"><label>季节 / 场景</label><select id="season"></select></div>
+      <div class="field"><label>已发笔记数</label><input type="number" id="publishedCount" min="0" max="99" value="1"><div class="hint">用于 10 篇止损线与内容比例提示</div></div>
+      <div class="field"><label>导入 notes_log.csv（可选）</label><input type="file" id="csvFile" accept=".csv,text/csv"><div class="hint">只读本地文件，不上传；用于标记已发题材</div></div>
+      <div id="csvInfo" class="hint"></div>
+      <div class="divider"></div>
+      <div class="notice"><b>四类内容 3:3:2:2</b><br>对比 3 / 差评聚类 3 / 价格分档 2 / 场景算账 2（每 10 篇）</div>
+      <div class="notice warn"><b>10 篇止损线</b><br>无一收藏率 ≥3% 且曝光 ≥5000 → 换切口，不换赛道</div>
+    </div>
+
+    <div data-step-pane="2" class="hide">
+      <div class="field"><label>当前选题</label><input type="text" id="topicName" placeholder="在题材雷达点选，或手动填写"></div>
+      <div class="field"><label>内容类型</label><select id="type"></select></div>
+      <div class="row">
+        <div class="field" style="flex:1"><label>搜索词 1</label><input type="text" id="kw1"></div>
+        <div class="field" style="flex:1"><label>搜索词 2</label><input type="text" id="kw2"></div>
+      </div>
+      <div class="field"><label>长尾词</label><input type="text" id="longtail" placeholder="如：洗烘一体还是套装"></div>
+      <div class="divider"></div>
+      <h3>素材与合规确认</h3>
+      <label class="chk"><input type="checkbox" id="fProduct">真实商品主图已截取</label>
+      <label class="chk"><input type="checkbox" id="fPrice">价格已当天实采复核</label>
+      <label class="chk"><input type="checkbox" id="fParam">参数来自官方参数页</label>
+      <label class="chk"><input type="checkbox" id="fMask">差评引用已打码</label>
+      <label class="chk"><input type="checkbox" id="fBiz">商业笔记已走蒲公英报备</label>
+      <label class="chk"><input type="checkbox" id="isBiz">本篇是商业笔记</label>
+      <div class="hint" style="margin-top:8px">来源与采集日期记在文档和核对表；<b>图上不显示那一行</b>。</div>
+    </div>
+
+    <div data-step-pane="3" class="hide">
+      <div class="field"><label>封面版本</label><select id="coverVersion">
+        <option value="index">索引版（主推，真实商品图 + 反差钩子）</option>
+        <option value="scene">场景版（AI 生成，图上标场景示意）</option>
+        <option value="product">商品图版（备份）</option>
+      </select></div>
+      <div class="field"><label>画幅</label><input type="text" value="1242 × 1660（3:4 手机端）" readonly></div>
+      <div class="divider"></div>
+      <div class="notice"><b>6 图固定结构</b><br>封面 → 结论 → 主表 → 数据 → 清单 → 真实坑。相邻页换构图。</div>
+      <div class="notice warn"><b>配图红线</b><br>不写“截自哪里 / 什么时间”；AI 图必须标“场景示意 · 非实拍”；价格写“买前当天复核”。</div>
+      <h3>卡片操作</h3>
+      <div class="hint">拖拽卡片排序，或点 ↑ ↓；点「展开」改每页文案、目标、主视觉与 AI 标注。改动自动保存到本机。</div>
+      <button class="btn tiny" id="resetBoard" style="margin-top:8px">恢复默认 6 图任务单</button>
+    </div>
+  </aside>
+
+  <!-- 中：流程画布 -->
+  <main class="panel">
+    <div class="stage-title"><h2 id="stageTitle">题材雷达</h2><span class="badge" id="stageBadge">四维评分 · 象限图</span></div>
+
+    <section data-stage="1">
+      <div class="kv" id="radarKv"></div>
+      <div class="quad-wrap">
+        <div>
+          <svg class="quad" viewBox="0 0 420 420" id="quad" aria-label="题材象限图"></svg>
+          <div class="hint" style="text-align:center">横轴 = 竞争度（右更挤） · 纵轴 = 搜索意图（上更强）</div>
+        </div>
+        <div>
+          <h3 style="margin-top:0">候选题材 <span class="badge" id="candCount"></span></h3>
+          <div id="candList" style="max-height:360px;overflow:auto"></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <h3>内容比例（按已发笔记估算，每 10 篇）</h3>
+      <div class="bar" id="ratioBar"></div>
+      <div class="bar-legend" id="ratioLegend"></div>
+      <div class="notice" id="ratioTip"></div>
+    </section>
+
+    <section data-stage="2" class="hide">
+      <div class="kv" id="copyKv"></div>
+      <h3>标题 A / B / C</h3>
+      <div id="titles"></div>
+      <h3>正文骨架（500-800 字，占位需替换）</h3>
+      <div class="sec"><h4>结构：结论 → 对比 → 人群 → 互动</h4><p id="bodyPreview"></p></div>
+      <h3>标签（5 个）</h3>
+      <div id="tags"></div>
+      <div class="notice warn">骨架不是成稿：把【】里的占位换成核实过的内容；价格与参数的采集日期留在文档/核对表，不上配图。</div>
+    </section>
+
+    <section data-stage="3" class="hide">
+      <div class="stage-title" style="margin-bottom:8px"><h2 style="font-size:14px">6 图任务单</h2><span class="badge" id="boardBadge">可拖拽排序</span></div>
+      <div class="storyboard" id="storyboard"></div>
+      <div id="detailWrap" class="sec card-detail hide" style="margin-top:12px"></div>
+    </section>
+  </main>
+
+  <!-- 右：预览与红线 -->
+  <aside class="panel">
+    <h2>预览与红线自检</h2>
+    <h3 id="previewTitle">当前预览</h3>
+    <div class="preview" id="previewBox">先在左侧填写并在题材雷达选一个题材。</div>
+    <div class="divider"></div>
+    <h3>红线自检 <span class="badge" id="checkCount"></span></h3>
+    <div id="checks"></div>
+    <div class="divider"></div>
+    <div class="notice"><b>v1 边界</b><br>只生成任务单与草稿，不接 LLM、不发布、不回评、不生图。图片仍走 xhs_render.py。</div>
+  </aside>
+</div>
+
+<footer class="exportbar">
+  <span class="lbl">导出</span>
+  <button class="btn" id="expMd">下载笔记草稿 .md</button>
+  <button class="btn" id="expBoard">下载图片任务单 .md</button>
+  <button class="btn primary" id="expHtml">下载配图 HTML 骨架</button>
+  <button class="btn ghost" id="copyMd">复制 Markdown</button>
+  <span class="spacer"></span>
+  <span class="status" id="status">自动保存到本机 · 不上传</span>
+  <button class="btn ghost tiny" id="resetAll">清空重置</button>
+</footer>
+
+<script>
+/* ============================================================
+   家电选购内容工作台 v1 · 纯前端规则引擎
+   规则来源：docs/09、docs/12、docs/13（冲突以 docs/12 为准）
+   ============================================================ */
+const TYPE_INFO = {
+  '对比型':   {ratio:3, intent:9, money:8, material:8, comp:0,  color:'#d9562a'},
+  '差评聚类': {ratio:3, intent:8, money:7, material:6, comp:-1, color:'#c98a1b'},
+  '价格分档': {ratio:2, intent:9, money:9, material:9, comp:1,  color:'#2e8b6b'},
+  '场景算账': {ratio:2, intent:7, money:6, material:7, comp:-1, color:'#4b6fb5'}
+};
+const CUT_INFO = {
+  '洗烘': {kw:['洗烘一体','洗烘套装'], comp:7, season:{'湿冷季':2,'回南天':2,'夏季':0,'全年':1}},
+  '冰箱': {kw:['风冷冰箱','直冷冰箱'], comp:5, season:{'湿冷季':0,'回南天':1,'夏季':2,'全年':1}},
+  '空调': {kw:['变频空调','定频空调'], comp:6, season:{'湿冷季':0,'回南天':1,'夏季':2,'全年':0}}
+};
+const PERSONAS=['租房 / 一人住','小三房 / 有娃','有阳台 / 朝北','三口之家','南方湿冷家庭'];
+const SEASONS=['湿冷季','回南天','夏季','全年'];
+const ANGLES={
+  '对比型':['A 还是 B','热泵还是冷凝','买前 6 项对照'],
+  '差评聚类':['被反复吐槽的 4 点','真缺陷还是误用','差评高频词'],
+  '价格分档':['三档预算各买谁','加钱买到什么','预算分界线'],
+  '场景算账':['值不值这笔账','用几次才回本','不适合买的人']
+};
+const COMPOSITION=['大字','清单','数字','对比','清单','实拍'];
+const STORE_KEY='xhs-content-studio-v1';
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let S={
+  step:1, cut:'洗烘', persona:PERSONAS[0], season:'湿冷季', publishedCount:1,
+  published:[], topic:null, type:'对比型', kw1:'洗烘一体', kw2:'洗烘套装', longtail:'洗烘一体还是套装',
+  titleIdx:0, flags:{fProduct:false,fPrice:false,fParam:false,fMask:false,fBiz:false,isBiz:false},
+  coverVersion:'index', board:[], openCard:-1
+};
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const v=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(v&&v.type)Object.assign(S,v)}catch(e){}}
+
+const $=id=>document.getElementById(id);
+function fillSelect(id,arr,val){$(id).innerHTML=arr.map(x=>`<option${x===val?' selected':''}>${esc(x)}</option>`).join('')}
+function setStatus(t){$('status').textContent=t;clearTimeout(setStatus._t);setStatus._t=setTimeout(()=>$('status').textContent='自动保存到本机 · 不上传',2400)}
+function refresh(){renderRadar();renderCopy();renderBoard();renderChecks();renderPreview();save()}
+
+/* ---------- 题材雷达 ---------- */
+function candidates(){
+  const c=CUT_INFO[S.cut], out=[];
+  Object.keys(TYPE_INFO).forEach(type=>{
+    ANGLES[type].forEach((angle,i)=>{
+      const ti=TYPE_INFO[type];
+      const intent=clamp(ti.intent+(c.season[S.season]||0)+(i===0?1:0),1,10);
+      const money=clamp(ti.money+(S.cut==='洗烘'?1:0),1,10);
+      const material=clamp(ti.material,1,10);
+      let comp=clamp(c.comp+ti.comp+(angle==='三档预算各买谁'?1:0),1,10);
+      const title=`${S.cut} · ${angle} · ${type}`;
+      const done=S.published.some(p=>(p.title||'').includes(angle)||((p.title||'').includes(c.kw[0])&&type===(p.type||'')));
+      if(done)comp=clamp(comp+2,1,10);
+      const total=Math.round(intent*.35+money*.3+material*.2+(10-comp)*.15);
+      out.push({id:`${type}-${i}`,type,angle,title,intent,money,material,comp,total,done});
+    });
+  });
+  return out.sort((a,b)=>b.total-a.total);
+}
+function renderRadar(){
+  const list=candidates();
+  $('radarKv').innerHTML=`
+    <div><span>切口</span><b>${esc(S.cut)}</b></div>
+    <div><span>季节</span><b>${esc(S.season)}</b></div>
+    <div><span>候选数</span><b>${list.length}</b></div>
+    <div><span>已发笔记</span><b>${S.published.length||S.publishedCount}</b></div>`;
+  const svg=$('quad');
+  const X=v=>46+clamp((v-4)/6,0,1)*330, Y=v=>374-clamp((v-6)/4,0,1)*330;
+  let s=`<rect x="46" y="44" width="330" height="330" fill="#fcfdfc" stroke="#dde4df"/>`;
+  s+=`<line x1="${X(7)}" y1="44" x2="${X(7)}" y2="374" stroke="#dde4df" stroke-dasharray="4 4"/>`;
+  s+=`<line x1="46" y1="${Y(8)}" x2="376" y2="${Y(8)}" stroke="#dde4df" stroke-dasharray="4 4"/>`;
+  s+=`<text class="q-label" x="46" y="386">4</text><text class="q-label" x="364" y="386">10</text>`;
+  s+=`<text class="q-label" x="30" y="378">6</text><text class="q-label" x="30" y="52">10</text>`;
+  s+=`<text class="q-label" x="56" y="62">高意图 · 低竞争｜优先做</text>`;
+  s+=`<text class="q-label" x="254" y="62">高意图 · 高竞争｜差异化</text>`;
+  s+=`<text class="q-label" x="56" y="364">低意图 · 低竞争｜补位</text>`;
+  s+=`<text class="q-label" x="258" y="364">低意图 · 高竞争｜避开</text>`;
+  s+=`<text class="q-label" x="6" y="210" transform="rotate(-90 6 210)">搜索意图 →</text>`;
+  s+=`<text class="q-label" x="150" y="410">竞争度 →</text>`;
+  list.forEach((d,i)=>{
+    const sel=S.topic&&S.topic.id===d.id;
+    const col=TYPE_INFO[d.type].color;
+    s+=`<circle data-id="${esc(d.id)}" cx="${X(d.comp)}" cy="${Y(d.intent)}" r="${sel?11:8}" fill="${col}" stroke="${sel?'#15201e':'#fff'}" stroke-width="${sel?3:1.5}" opacity="${d.done?.45:1}" style="cursor:pointer"><title>${esc(d.title)}｜综合 ${d.total}｜竞争 ${d.comp}｜意图 ${d.intent}</title></circle>`;
+    if(sel)s+=`<text x="${X(d.comp)+14}" y="${Y(d.intent)+5}" font-size="12" font-weight="700" fill="#1b2623">${esc(d.angle)}</text>`;
+  });
+  svg.innerHTML=s;
+  svg.querySelectorAll('circle').forEach(el=>el.addEventListener('click',()=>pickTopic(el.dataset.id)));
+  $('candCount').textContent=list.length+' 个';
+  $('candList').innerHTML=list.map(d=>`
+    <div class="cand ${S.topic&&S.topic.id===d.id?'on':''} ${d.done?'done':''}" data-id="${esc(d.id)}">
+      <div class="t">${esc(d.title)} ${d.done?'<span class="tagpill">已发过</span>':''}</div>
+      <div class="m"><span>综合 <b>${d.total}</b></span><span>意图 ${d.intent}</span><span>变现 ${d.money}</span><span>素材 ${d.material}</span><span>竞争 ${d.comp}</span></div>
+    </div>`).join('');
+  $('candList').querySelectorAll('.cand').forEach(el=>el.addEventListener('click',()=>pickTopic(el.dataset.id)));
+  const counts={};Object.keys(TYPE_INFO).forEach(t=>counts[t]=0);
+  S.published.forEach(p=>{if(counts[p.type]!=null)counts[p.type]++});
+  $('ratioBar').innerHTML=Object.keys(TYPE_INFO).map(t=>`<i style="background:${TYPE_INFO[t].color};width:${TYPE_INFO[t].ratio*10}%" title="${t} 目标 ${TYPE_INFO[t].ratio}/10">${TYPE_INFO[t].ratio}</i>`).join('');
+  $('ratioLegend').innerHTML=Object.keys(TYPE_INFO).map(t=>`<span><b style="background:${TYPE_INFO[t].color}"></b>${t} 目标 ${TYPE_INFO[t].ratio} · 已发 ${counts[t]}</span>`).join('');
+  const gaps=Object.keys(TYPE_INFO).map(t=>({t,g:TYPE_INFO[t].ratio-Math.max(0,counts[t]-Math.floor(S.publishedCount/10)*TYPE_INFO[t].ratio)})).sort((a,b)=>b.g-a.g);
+  $('ratioTip').innerHTML=`按当前节奏，建议下一篇优先：<b>${esc(gaps[0].t)}</b>（缺口最大）。四类循环发，不连续两篇同类型。`;
+}
+function pickTopic(id){
+  const d=candidates().find(x=>x.id===id);if(!d)return;
+  S.topic={id:d.id,type:d.type,angle:d.angle,title:d.title};
+  S.type=d.type;const kw=CUT_INFO[S.cut].kw;S.kw1=kw[0];S.kw2=kw[1];
+  S.longtail=`${kw[0]}还是${kw[1]}`;S.titleIdx=0;S.board=makeBoard();S.openCard=-1;
+  $('topicName').value=d.title;$('type').value=d.type;$('kw1').value=kw[0];$('kw2').value=kw[1];$('longtail').value=S.longtail;
+  setStatus('已选题材，文案与图片任务单已同步');refresh();
+}
+
+/* ---------- 文案工坊 ---------- */
+function makeTitles(){
+  const t=S.type,k1=S.kw1||'A',k2=S.kw2||'B',p=S.persona.split(' / ')[0],s=S.season;
+  const M={
+    '对比型':[
+      [`${k1}还是${k2}？6 项差别一次说清`,'A · 搜索友好｜两个搜索词在前 15 字'],
+      ['别买错：标题写着「洗烘」，主图却不带烘干','B · 反差钩子｜真实发现，不点名品牌'],
+      [`${p}${s}${S.cut}怎么选？看完这 6 项再下单`,'C · 检索型｜人群 + 季节 + 品类长尾']
+    ],
+    '差评聚类':[
+      [`${k1}差评盘点：被反复吐槽的 4 个问题`,'A · 搜索友好｜差评 + 品类词前置'],
+      ['扒了几百条评价，真正的坑集中在这 4 处','B · 反差钩子｜数字要按实际采样量填写'],
+      [`${p}${s}买${S.cut}先看这些差评，再决定`,'C · 检索型｜人群 + 季节长尾']
+    ],
+    '价格分档':[
+      [`${k1}还是${k2}？三档预算各买谁`,'A · 搜索友好｜预算词进前 15 字'],
+      ['别多花冤枉钱：三档预算的分界线在哪','B · 反差钩子｜不写死价格承诺'],
+      [`${p}${S.cut}预算表：各档该留什么、砍什么`,'C · 检索型｜人群 + 预算长尾']
+    ],
+    '场景算账':[
+      [`${s}${S.cut}到底值不值？算一笔账`,'A · 搜索友好｜场景词 + 决策词'],
+      ['一年用不到 30 次，这台机器真没必要买','B · 反差钩子｜临界点要按实际假设填写'],
+      [`${p}${s}${S.cut}值不值：成本与临界点`,'C · 检索型｜地域/季节 + 人群']
+    ]
+  };
+  return M[t]||M['对比型'];
+}
+function makeBody(){
+  const k1=S.kw1||'A',k2=S.kw2||'B',t=S.type,p=S.persona,s=S.season;
+  const head=`先说结论：${p}这类情况，优先看【填入你的判断：买哪类、为什么】。这篇用能查到的公开参数和真实评价，把「${k1}还是${k2}」拆成几件可核对的事，不念参数表。开头 100 字内就让人知道该买哪一类，别把结论藏到最后。`;
+  const map={
+    '对比型':[
+      ['一、把差别拉平到一张表',`对比只写 6 项：容量、工作/烘干方式、能耗、噪音、安装条件、后续成本。每项一句人话结论，数字来自【官方参数页 + 采集日期记在文档，不上图】。核不实的改成定性表述，例如「热泵明显更省电」，不要写没有依据的百分比。`],
+      ['二、按人群分别给答案','一人住 / 小阳台、三口人 / 常年潮湿、预算卡得紧，三类人各给一句明确建议。不要写「看需求」，要写「这类人买 A、那类人买 B」。每句后面补一句理由，理由要能用参数或场景解释，不能只是主观感受。'],
+      ['三、买前核对清单','留 6 行短句：容量怎么看、认准哪两个词、尺寸先量哪里、绒毛怎么清、单次多久、预算分界。这张是收藏钩子，写成能截屏对着一遍的形式；每行不超过 20 字，手机上不用放大也能读完。'],
+      ['四、一个真实的坑','写一个可核验的发现（如标题与参数页不一致），说明怎么避免。引用商品图只作举例，不点名贬低、不引导站外。只写你亲眼核过的现象，把判断权留给读者。']
+    ],
+    '差评聚类':[
+      ['一、先交代采样',`写清样本量、型号数、时间范围、归类方法（如每型号抽 100 条，按问题类型人工归类）。没有采样说明的差评盘点没有可信度。数字来自【评价页手工抽样，日期记在文档，不上图】；采样量写实际值，不写凑整的漂亮数字。`],
+      ['二、差评归类图','做成四类占比图，每类一句人话，图下注明各类别怎么界定。引用原文必须打码用户名与头像；不写「某品牌质量差」，只写「某型号该类问题占比 X%」。被归到误用类的评价要单独说明原因。'],
+      ['三、四个真问题','每条给「表现 + 发生率 + 怎么规避」，规避建议要具体到使用动作或购买前的核对项。把「烘不干」这类拆成装太满 / 没选对程序，区分真缺陷与误用；分不清的标明「样本不足，暂不下结论」。'],
+      ['四、结尾互动','问一句「你踩过哪个」，只引导评论区，不引导私信或站外。可以对评论里出现频次高的情况补一句判断方法，让评论区变成下一期的素材来源。']
+    ],
+    '价格分档':[
+      ['一、三档预算怎么切','按【填入核实后的价位区间】切三档，每档一句话：必须有的功能、可以砍的功能。价格来自【当天实采电商页，日期记在文档，不上图】，发布当天复核；档位区间随季节和补贴变化，写完再对一次。'],
+      ['二、各档代表机型','每档 1-2 个型号，只写类型与关键差别，不写推荐店铺。价格差异大时注明「含补贴/券，以你点开那天为准」。用 A 类 / B 类或「某型号」表述，避免被读成给某一款背书。'],
+      ['三、加钱买到什么','写清从低档到中档、中档到高档各自多花多少钱、多得到什么，避免「越贵越好」的空话。如果加钱只买到品牌溢价，也照实写；这条最能建立长期信任。'],
+      ['四、不适合买的人','给一句劝退：什么情况不用加钱、什么情况这一档就够了。这句最能建立信任，也能减少「买完后悔」的评论。最后用一句话把三档各自适合谁再收一遍。']
+    ],
+    '场景算账':[
+      ['一、一个具体场景',`写${s}下的真实场景（如墙面出水、衣服三天不干）。用感受开头，不用参数开头；场景要具体到一天里的某个时刻，读者才能对号入座。避免写成地域吐槽，落点仍在「要不要买这类机器」。`],
+      ['二、算一笔账','购机价 ÷ 使用年限 + 年电费（按能效与频次给区间）+ 晾晒的隐性时间成本。电价按档位写区间，不给单一数字；数据来自【居民电价 + 能效标识】。每一项的假设写在旁边，读者能自己替换成自家的数字。'],
+      ['三、临界点','算出一年用多少次才划算，写明假设。假设变了结论会变，这点必须说清。可以把临界点单独做成一张图，方便截屏保存；图上只写结论和假设，不写数据出处与时间。'],
+      ['四、不适合买的人','有朝南大阳台、一年用不到 30 次的人不用买。给劝退比给推荐更可信。最后说清这笔账只算现金成本，不包括噪音、占地、维护这些主观因素，让读者自己权衡。']
+    ]
+  };
+  const secs=(map[t]||map['对比型']).map(([h,c])=>`【${h}】\n${c}`).join('\n\n');
+  return `${head}\n\n${secs}\n\n【互动】\n你家是什么情况？评论区说一下，我帮你判断这类该怎么选。正文只暗示一次收藏，不反复喊；不引导私信或站外成交。`;
+}
+function renderCopy(){
+  const titles=makeTitles();
+  $('copyKv').innerHTML=`<div><span>内容类型</span><b>${esc(S.type)}</b></div><div><span>目标人群</span><b>${esc(S.persona)}</b></div><div><span>搜索词</span><b style="font-size:13px">${esc(S.kw1)} / ${esc(S.kw2)}</b></div><div><span>选中标题</span><b style="font-size:13px">${esc(titles[S.titleIdx][0].slice(0,14))}…</b></div>`;
+  $('titles').innerHTML=titles.map((x,i)=>`<div class="title-opt ${S.titleIdx===i?'on':''}" data-i="${i}"><strong>${esc(x[0])}</strong><small>${esc(x[1])}</small></div>`).join('');
+  $('titles').querySelectorAll('.title-opt').forEach(el=>el.addEventListener('click',()=>{S.titleIdx=+el.dataset.i;setStatus('已切换标题');renderCopy();renderPreview();save()}));
+  const body=makeBody();$('bodyPreview').textContent=body;
+  $('bodyPreview').dataset.body=body;
+  const tags=[`#${S.kw1}`,`#${S.kw2}`,`#${S.longtail||S.kw1+'还是'+S.kw2}`,'#家电选购','#'+S.persona.split(' / ')[0]+'家电'];
+  $('tags').innerHTML=tags.map(x=>`<span class="tagpill">${esc(x)}</span>`).join('')+`<div class="hint" style="margin-top:6px">前两个搜索词 · 第三个长尾 · 后两个人群池</div>`;
+}
+
+/* ---------- 图片编排 ---------- */
+function makeBoard(){
+  const k1=S.kw1||'A',k2=S.kw2||'B',p=S.persona.split(' / ')[0],s=S.season;
+  const t=S.type;
+  const main={
+    '对比型':{goal:'6 项差别逐条对比，做收藏钩子',visual:'巨号数字 6 + 六行对比表',copy:'烘干容量：一体多为 6-7kg\n烘干方式：认准热泵\n绒毛处理：套装独立更干净\n占地：一体省一个机位\n单次时长：烘满约 2 小时\n预算：4000 内优先一体'},
+    '差评聚类':{goal:'四类高频问题一眼看完',visual:'四行占比条 + 大字数字 4',copy:'绒毛堆积：清洁频次要算进去\n烘不干厚件：多半是装太满\n噪音：看安装位置\n售后响应：买前问清网点'},
+    '价格分档':{goal:'三档预算对号入座',visual:'三行预算阶梯 + 大字数字 3',copy:'入门档：必须有基本烘干\n中档：热泵 + 容量 upgrades\n高档：做工与洗净比\n加钱买到什么，一句话说清'},
+    '场景算账':{goal:'算账过程可复核',visual:'算式分行 + 临界点大字',copy:'购机价 ÷ 使用年限\n+ 年电费（按能效给区间）\n+ 晾晒的隐性时间\n临界点：一年用多少次划算'}
+  }[t];
+  const dataPage={
+    '对比型':{goal:'当天实采价格，建立信任',visual:'五行价格表（真实页面截取整理）',copy:'① 价格含补贴/券，以你点开那天为准\n② 同是热泵，差价在做工和洗净比\n③ 认准参数页的「热泵式」，别看标题'},
+    '差评聚类':{goal:'真缺陷与误用分开讲',visual:'两栏对照：真缺陷 / 误用',copy:'真缺陷：看设计，买前能规避\n误用：装太满、没选对程序\n每条引用已打码，不点名品牌'},
+    '价格分档':{goal:'各档代表机型与保留功能',visual:'三档对照表',copy:'每档 1-2 个代表机型\n必须有的 / 可以砍的\n价格买前当天复核'},
+    '场景算账':{goal:'给出临界点与劝退条件',visual:'临界点大字 + 两行条件',copy:'一年用不到 30 次：不买\n有朝南大阳台：不买\n电价按档位写区间，不给单一数字'}
+  }[t];
+  const coverHook=S.coverVersion==='scene'?`${s}，${k1}真的需要吗`:`别买错｜${k1} vs ${k2}`;
+  return [
+    {goal:'3 秒停住，说清冲突',visual:S.coverVersion==='scene'?'AI 场景图 + 白字黑描边钩子 + 场景示意标注':'索引版巨字 + 真实商品主图 + 反差钩子',copy:coverHook,source:'真实商品主图（来源存 reference，不上图）',ai:S.coverVersion==='scene',note:'场景版必须标「场景示意 · 非实拍」'},
+    {goal:'先给三类人的结论',visual:'大字数字 3 + 三行人群结论',copy:`${p}：按你的情况给一句\n小三房 / 有娃：按你的判断给一句\n预算紧：按你的判断给一句`,source:'经验判断 + 公开参数',ai:false,note:''},
+    {goal:main.goal,visual:main.visual,copy:main.copy,source:'官方参数页 / 评价页（来源记在文档）',ai:false,note:''},
+    {goal:dataPage.goal,visual:dataPage.visual,copy:dataPage.copy,source:'当天实采电商页 / 抽样评价（来源记在文档）',ai:false,note:'图上不写采集日期与来源行'},
+    {goal:'存图对照，做收藏钩子',visual:'清单勾选符号 + 六行短句',copy:'容量怎么看\n认准哪两个词\n先量哪里尺寸\n绒毛怎么清\n单次多久\n预算分界在哪',source:'经验总结 + 公开参数',ai:false,note:''},
+    {goal:'真实发现做差异化钩子',visual:'真实商品主图 + 一句提醒',copy:'标题写着洗烘，主图却标「不带烘干」\n买前点开主图看清楚',source:'真实商品主图（来源存 reference，不上图）',ai:false,note:'不点名贬低品牌'}
+  ].map((x,i)=>({...x,composition:COMPOSITION[i]}));
+}
+function renderBoard(){
+  $('storyboard').innerHTML=S.board.map((p,i)=>`
+    <div class="card" draggable="true" data-i="${i}">
+      <div class="topbar"><b>${String(i+1).padStart(2,'0')}</b><span>${esc(p.composition)}</span></div>
+      <div class="body">
+        <div class="goal">${esc(p.goal)}</div>
+        <div class="vis">${esc(p.visual)}</div>
+        <div class="copy">${esc(p.copy)}</div>
+        <div class="mini"><em>${p.ai?'AI · 需标注':'真实/自制'}</em><em>${esc(p.composition)}</em></div>
+        <div class="ops">
+          <button class="btn tiny" data-act="open" data-i="${i}">展开</button>
+          <button class="btn tiny" data-act="up" data-i="${i}" ${i===0?'disabled':''}>↑</button>
+          <button class="btn tiny" data-act="down" data-i="${i}" ${i===S.board.length-1?'disabled':''}>↓</button>
+        </div>
+      </div>
+    </div>`).join('');
+  const cards=[...$('storyboard').querySelectorAll('.card')];
+  cards.forEach(card=>{
+    const i=+card.dataset.i;
+    card.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);card.classList.add('drag')});
+    card.addEventListener('dragend',()=>card.classList.remove('drag'));
+    card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('over')});
+    card.addEventListener('dragleave',()=>card.classList.remove('over'));
+    card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('over');const from=+e.dataTransfer.getData('text/plain');if(isNaN(from))return;const [m]=S.board.splice(from,1);S.board.splice(i,0,m);S.board=S.board.map((x,j)=>({...x,composition:COMPOSITION[j]}));S.openCard=-1;setStatus('卡片已重排');refresh()});
+  });
+  $('storyboard').querySelectorAll('button[data-act]').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();const i=+b.dataset.i,act=b.dataset.act;
+    if(act==='open'){S.openCard=S.openCard===i?-1:i}
+    else if(act==='up'&&i>0){[S.board[i-1],S.board[i]]=[S.board[i],S.board[i-1]]}
+    else if(act==='down'&&i<S.board.length-1){[S.board[i+1],S.board[i]]=[S.board[i],S.board[i+1]]}
+    if(act!=='open')S.board=S.board.map((x,j)=>({...x,composition:COMPOSITION[j]}));
+    refresh();
+  }));
+  renderDetail();
+  $('boardBadge').textContent=S.board.length+' 页 · 1242×1660';
+}
+function renderDetail(){
+  const w=$('detailWrap');const i=S.openCard;
+  if(i<0||!S.board[i]){w.classList.add('hide');w.innerHTML='';return}
+  const p=S.board[i];
+  w.classList.remove('hide');
+  w.innerHTML=`<h4>第 ${i+1} 页 · 编辑任务单字段</h4>
+    <label>目标</label><input id="dGoal" value="${esc(p.goal)}">
+    <label>主视觉</label><input id="dVisual" value="${esc(p.visual)}">
+    <label>页面文案（图上文字；每行一条）</label><textarea id="dCopy">${esc(p.copy)}</textarea>
+    <label>数据来源（内部记录，不出现在图上）</label><input id="dSource" value="${esc(p.source)}">
+    <label class="chk"><input type="checkbox" id="dAi" ${p.ai?'checked':''}>AI 生成图（图上必须显示「场景示意 · 非实拍」）</label>
+    <label>备注</label><input id="dNote" value="${esc(p.note)}">
+    <div style="margin-top:9px;display:flex;gap:6px"><button class="btn tiny" id="dSave">保存到任务单</button><button class="btn tiny ghost" id="dClose">收起</button></div>`;
+  $('dSave').onclick=()=>{
+    let copy=$('dCopy').value;
+    if($('dAi').checked&&!copy.includes('场景示意'))copy+=(copy?'\n':'')+'场景示意 · 非实拍';
+    Object.assign(S.board[i],{goal:$('dGoal').value,visual:$('dVisual').value,copy,source:$('dSource').value,ai:$('dAi').checked,note:$('dNote').value});
+    setStatus('第 '+(i+1)+' 页已更新');refresh();
+  };
+  $('dClose').onclick=()=>{S.openCard=-1;refresh()};
+}
+
+/* ---------- 红线自检 ---------- */
+function allCopyText(){return [makeTitles().map(x=>x[0]).join(' '),makeBody(),S.board.map(p=>p.copy).join(' ')].join(' ')}
+function renderChecks(){
+  const txt=allCopyText();
+  const extreme=(txt.match(/(最好|最佳|最强|最低|最高|最便宜|全网最低|第一|100%|闭眼入|绝对不会坏|必买)/g)||[]);
+  const srcHit=(S.board.map(p=>p.copy).join(' ').match(/(淘宝|天猫|截自|截图|采集日期|2026[.\-年]|11月)/g)||[]);
+  const aiPages=S.board.filter(p=>p.ai);
+  const aiOk=aiPages.every(p=>p.copy.includes('场景示意'));
+  const flowHit=(txt.match(/(微信|加V|私域|二维码)/g)||[]);
+  const priceNeed=['价格分档','对比型'].includes(S.type);
+  const list=[
+    {n:'无极限词',ok:extreme.length===0,d:extreme.length?'命中：'+extreme.join(' / '):'未命中最/第一/100%/闭眼入等'},
+    {n:'配图不显示来源与时间',ok:srcHit.length===0,d:srcHit.length?'图上命中：'+srcHit.join(' / '):'6 页图上均无来源行与采集日期'},
+    {n:'来源日期留在文档',ok:true,d:'来源与时间记在 docs/11 和核对表；图上不展示'},
+    {n:'AI 图标注',ok:aiOk,d:aiPages.length?(aiOk?'已标注「场景示意 · 非实拍」':'未标注'):'本篇无 AI 图'},
+    {n:'价格已当天复核',ok:!priceNeed||S.flags.fPrice,d:priceNeed?'价格类必须实采并复核':'本篇不依赖实时价格'},
+    {n:'参数来自官方页',ok:S.flags.fParam,d:S.flags.fParam?'已确认':'请确认后发布'},
+    {n:'真实商品图已备',ok:S.flags.fProduct,d:S.flags.fProduct?'已确认':'封底要用真实主图'},
+    {n:'差评引用已打码',ok:S.type!=='差评聚类'||S.flags.fMask,d:S.type==='差评聚类'?'差评类必须打码':'本篇非差评聚类'},
+    {n:'不导站外',ok:flowHit.length===0,d:flowHit.length?'命中：'+flowHit.join(' / '):'无微信/私域/二维码'},
+    {n:'商业笔记报备',ok:!S.flags.isBiz||S.flags.fBiz,d:S.flags.isBiz?'已确认走蒲公英':'本篇非商业笔记'},
+    {n:'不刷量不买粉',ok:true,d:'平台红线，工具不会执行此类操作'},
+    {n:'发布方式',ok:true,d:'官方创作中心手动/定时发布，不用第三方自动工具'}
+  ];
+  const okCount=list.filter(x=>x.ok).length;
+  $('checkCount').textContent=okCount+'/'+list.length+' 通过';
+  $('checks').innerHTML=list.map(x=>`<div class="check"><div class="h"><b>${esc(x.n)}</b><span class="st ${x.ok?'ok':'no'}">${x.ok?'通过':'待办'}</span></div><p>${esc(x.d)}</p></div>`).join('');
+}
+function renderPreview(){
+  let t='',b='';
+  if(S.step===1){
+    const d=S.topic||candidates()[0];
+    t='题材雷达 · 当前重点';
+    b=`选题：${d?d.title:'未选'}\n类型：${d?d.type:S.type}\n切口：${S.cut}｜人群：${S.persona}｜季节：${S.season}\n\n四维评分：搜索意图 ${d?d.intent:'-'} / 变现距离 ${d?d.money:'-'} / 素材可得 ${d?d.material:'-'} / 竞争度 ${d?d.comp:'-'}\n\n提示：先从象限图左上角（高意图、低竞争）里挑。`;
+  }else if(S.step===2){
+    const titles=makeTitles();t='文案预览 · 标题 '+String(S.titleIdx+1).padStart(2,'0');
+    b=titles[S.titleIdx][0]+'\n\n'+makeBody().slice(0,320)+'\n…\n\n标签：'+[S.kw1,S.kw2,S.longtail||S.kw1+'还是'+S.kw2,'家电选购',S.persona.split(' / ')[0]+'家电'].map(x=>'#'+x).join(' ');
+  }else{
+    t='图片任务单 · 6 页';
+    b=S.board.map((p,i)=>`${String(i+1).padStart(2,'0')} [${p.composition}] ${p.goal}\n文案：${p.copy.split('\n')[0]}`).join('\n\n');
+  }
+  $('previewTitle').textContent=t;$('previewBox').textContent=b;
+}
+
+/* ---------- 导出 ---------- */
+function down(name,text,type){
+  const blob=new Blob([text],{type:type||'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);setStatus('已下载 '+name);
+}
+function mdDraft(){
+  const titles=makeTitles(),tags=[S.kw1,S.kw2,S.longtail||S.kw1+'还是'+S.kw2,'家电选购',S.persona.split(' / ')[0]+'家电'].map(x=>'#'+x);
+  return `# ${titles[S.titleIdx][0]}\n\n> 备选标题\n> A ${titles[0][0]}\n> B ${titles[1][0]}\n> C ${titles[2][0]}\n\n${makeBody()}\n\n${tags.join(' ')}\n\n---\n## 发布前核对（来源与时间记在文档，不写进配图）\n- 价格/参数来源与采集日期：记在 docs/11 与核对表\n- 配图上不显示「截自哪里 / 什么时间」\n- 商业笔记走蒲公英报备；AI 图标注；不刷量\n`;
+}
+function boardMd(){
+  return `# 图片任务单 · ${S.topic?S.topic.title:S.type}\n\n画幅：1242×1660（3:4）｜封面：${S.coverVersion}\n\n`+
+  S.board.map((p,i)=>`## ${String(i+1).padStart(2,'0')} · ${p.composition}\n- 目标：${p.goal}\n- 主视觉：${p.visual}\n- 图上文案：\n${p.copy.split('\n').map(x=>'  - '+x).join('\n')}\n- 数据来源（内部记录，不上图）：${p.source}\n- AI：${p.ai?'是（图上标「场景示意 · 非实拍」）':'否'}\n- 备注：${p.note}\n`).join('\n')+
+  `\n> 来源与采集时间留在文档；图上不显示。导出 HTML 骨架后替换占位数据，再走 xhs_render.py 出图。\n`;
+}
+const KIT_CSS=`:root{--W:1242px;--H:1660px;--m:84px;--body:42px;--label:32px;--paper:#F4F5F3;--ink:#16201F;--ink2:#485452;--gray:#6E7A77;--line:#CFD6D2;--accent:#D9562A;--accent2:#FBE7DE;--sans:"Noto Sans SC","PingFang SC","Source Han Sans SC","Microsoft YaHei",sans-serif;--latin:"Helvetica Neue",Arial,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}html,body{background:var(--paper)}body{font-family:var(--sans);color:var(--ink)}
+.xhs-deck{display:flex;flex-direction:column;width:max-content}.xhs-page{position:relative;width:var(--W);height:var(--H);overflow:hidden;background:var(--paper);flex:none}
+.cover{background:#15201E}.cover .no,.cover .kick{position:absolute;top:96px;font:600 42px var(--sans);letter-spacing:4px;color:#9FB0AB}.cover .no{left:var(--m)}.cover .kick{right:var(--m)}
+.cover .big{position:absolute;left:60px;top:170px;font:900 470px/.9 var(--latin);color:#F4F5F3;letter-spacing:-24px}.cover .big i{font-style:normal;color:var(--accent)}
+.cover .t1{position:absolute;left:var(--m);top:660px;font:900 92px/1.1 var(--sans);color:#F4F5F3}.cover .t2{position:absolute;left:var(--m);top:772px;font:500 46px/1.3 var(--sans);color:#C3CFCA}
+.cover .bar{position:absolute;left:var(--m);right:var(--m);top:880px;height:4px;background:#3B4B47}.cover .hnt{position:absolute;left:var(--m);bottom:150px;right:var(--m);font:600 44px/1.45 var(--sans);color:var(--accent)}
+.inner .hd{position:absolute;left:var(--m);top:96px;font:600 42px var(--sans);letter-spacing:4px;color:var(--gray)}.inner .num{position:absolute;left:56px;top:160px;font:900 250px/1 var(--latin);color:var(--ink);letter-spacing:-16px}
+.inner .numsub{position:absolute;left:var(--m);top:410px;font:900 50px/1.2 var(--sans);color:var(--ink);width:1000px}
+.inner .rows{position:absolute;left:var(--m);right:var(--m);top:560px}.inner .row{display:flex;align-items:center;border-top:2px solid var(--ink);min-height:118px;font-size:var(--body)}
+.inner .row:last-child{border-bottom:2px solid var(--ink)}.inner .idx{font:800 44px var(--latin);width:100px;color:var(--accent);flex:none}.inner .val{color:var(--ink2);flex:1;font-size:42px}
+.inner .tag{position:absolute;left:var(--m);bottom:150px;background:var(--accent);color:#fff;font:700 42px var(--sans);padding:18px 30px;border-radius:6px}.inner .foot{position:absolute;left:var(--m);bottom:64px;font:400 32px var(--sans);color:var(--gray)}
+.ai-note{position:absolute;right:var(--m);top:96px;background:#fff0d8;color:#8a5a00;font:700 36px var(--sans);padding:10px 18px;border-radius:6px}`;
+function htmlSkeleton(){
+  const titles=makeTitles();
+  const rows=html=>html.split('\n').filter(Boolean).map((x,i)=>`<div class="row"><span class="idx">${String(i+1).padStart(2,'0')}</span><span class="val">${esc(x)}</span></div>`).join('');
+  const pages=S.board.map((p,i)=>{
+    if(i===0){
+      const big=S.coverVersion==='scene'?'?':String(Math.max(1,p.copy.match(/\d+/)?.[0]||6));
+      return `<!-- ${String(i+1).padStart(2,'0')} 封面 -->\n<section class="xhs-page cover">\n  <div class="no">家电选购避坑 / ${String(S.publishedCount+1).padStart(2,'0')}</div>\n  <div class="kick">${esc(S.cut)}</div>\n  <div class="big">${esc(big)}</div>\n  <div class="t1">${esc(p.copy.split('\n')[0])}</div>\n  <div class="t2">${esc(p.goal)}</div>\n  <div class="bar"></div>\n  <!-- 图片放 assets/product.png；场景版须标注场景示意 -->\n  <!-- <img src="assets/product.png" style="position:absolute;right:70px;bottom:150px;width:520px"> -->\n  ${p.ai?'<div class="ai-note">场景示意 · 非实拍</div>':''}\n</section>`;
+    }
+    const lines=p.copy.split('\n').filter(Boolean);
+    const num=lines.length;
+    return `<!-- ${String(i+1).padStart(2,'0')} ${esc(p.composition)} -->\n<section class="xhs-page inner">\n  <div class="hd">${esc(p.goal)}</div>\n  <div class="num">${num}</div>\n  <div class="numsub">${esc(p.visual)}</div>\n  <div class="rows">${rows(p.copy)}</div>\n  ${i===S.board.length-2?'<div class="tag">收藏这张，买前对照</div>':''}\n  <div class="foot">参数/价格买前当天复核</div>\n  ${p.ai?'<div class="ai-note">场景示意 · 非实拍</div>':''}\n</section>`;
+  }).join('\n\n');
+  return `<!-- 占位数据必须核实后才能发布：图上不写商品图来源与采集时间。\n渲染命令：python3 ~/.workbuddy/skills/huashu-design/scripts/xhs_render.py <本文件> --out <目录>/out --jpg\n体检命令：python3 ~/.workbuddy/skills/huashu-design/scripts/design_lint.py check <本文件> --viewport 1242x1660 --min-body 42 --min-label 32 -->\n<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>${esc(titles[S.titleIdx][0])}</title>\n<style>${KIT_CSS}</style></head><body>\n<main class="xhs-deck">\n\n${pages}\n\n</main></body></html>\n`;
+}
+async function copyMd(){
+  const t=mdDraft();
+  try{await navigator.clipboard.writeText(t);setStatus('Markdown 已复制')}
+  catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');setStatus('Markdown 已复制')}catch(_){setStatus('复制失败，请用下载')}ta.remove()}
+}
+
+/* ---------- 事件 ---------- */
+function setStep(n){
+  S.step=n;
+  document.querySelectorAll('.step').forEach(b=>b.classList.toggle('on',+b.dataset.step===n));
+  document.querySelectorAll('[data-step-pane]').forEach(p=>p.classList.toggle('hide',+p.dataset.stepPane!==n));
+  document.querySelectorAll('[data-stage]').forEach(p=>p.classList.toggle('hide',+p.dataset.stage!==n));
+  $('stageTitle').textContent={1:'题材雷达',2:'文案工坊',3:'图片编排'}[n];
+  $('stageBadge').textContent={1:'四维评分 · 象限图',2:'标题 / 骨架 / 标签',3:'6 图任务单 · 可拖拽'}[n];
+  renderPreview();save();
+}
+function bind(){
+  $('steps').addEventListener('click',e=>{const b=e.target.closest('.step');if(b)setStep(+b.dataset.step)});
+  fillSelect('cut',Object.keys(CUT_INFO),S.cut);fillSelect('persona',PERSONAS,S.persona);fillSelect('season',SEASONS,S.season);fillSelect('type',Object.keys(TYPE_INFO),S.type);
+  $('cut').value=S.cut;$('persona').value=S.persona;$('season').value=S.season;$('type').value=S.type;
+  $('publishedCount').value=S.publishedCount;$('topicName').value=S.topic?S.topic.title:'';
+  $('kw1').value=S.kw1;$('kw2').value=S.kw2;$('longtail').value=S.longtail;
+  $('coverVersion').value=S.coverVersion;
+  Object.keys(S.flags).forEach(k=>{if($(k))$(k).checked=S.flags[k]});
+  const onInput=(id,fn)=>{const el=$(id);el.addEventListener('input',()=>{fn(el.value);refresh()})};
+  onInput('cut',v=>{S.cut=v;S.topic=null;S.board=makeBoard();const kw=CUT_INFO[v].kw;S.kw1=kw[0];S.kw2=kw[1];S.longtail=`${kw[0]}还是${kw[1]}`;$('kw1').value=S.kw1;$('kw2').value=S.kw2;$('longtail').value=S.longtail;$('topicName').value=''});
+  onInput('persona',v=>{S.persona=v;S.board=makeBoard()});
+  onInput('season',v=>{S.season=v;S.board=makeBoard()});
+  onInput('publishedCount',v=>{S.publishedCount=clamp(parseInt(v)||0,0,99)});
+  onInput('topicName',v=>{S.topic={title:v,id:'custom',type:S.type,angle:v};S.board=makeBoard()});
+  onInput('type',v=>{S.type=v;if(S.topic)S.topic.type=v;S.board=makeBoard()});
+  onInput('kw1',v=>{S.kw1=v;S.board=makeBoard()});
+  onInput('kw2',v=>{S.kw2=v;S.board=makeBoard()});
+  onInput('longtail',v=>{S.longtail=v});
+  $('coverVersion').addEventListener('change',e=>{S.coverVersion=e.target.value;S.board=makeBoard();refresh()});
+  Object.keys(S.flags).forEach(k=>$(k).addEventListener('change',e=>{S.flags[k]=e.target.checked;refresh()}));
+  $('csvFile').addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();r.onload=()=>{
+      const lines=String(r.result).replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);
+      if(lines.length<2){$('csvInfo').textContent='文件为空或只有表头';return}
+      const head=lines[0].split(',').map(x=>x.trim());
+      const ti=head.indexOf('标题'),yi=head.indexOf('类型');
+      S.published=lines.slice(1).map(l=>{const c=l.split(',');return{title:c[ti]||'',type:c[yi]||''}}).filter(x=>x.title);
+      S.publishedCount=Math.max(S.publishedCount,S.published.length);$('publishedCount').value=S.publishedCount;
+      $('csvInfo').textContent=`已读 ${S.published.length} 条已发笔记，重复题材会被标记`;setStatus('notes_log.csv 已导入');refresh();
+    };r.readAsText(f,'utf-8');
+  });
+  $('resetBoard').onclick=()=>{S.board=makeBoard();S.openCard=-1;setStatus('任务单已恢复默认');refresh()};
+  $('resetAll').onclick=()=>{if(!confirm('清空本机保存的所有输入与任务单？'))return;localStorage.removeItem(STORE_KEY);location.reload()};
+  $('expMd').onclick=()=>down(`小红书草稿-${S.type}-${S.kw1}.md`,mdDraft(),'text/markdown;charset=utf-8');
+  $('expBoard').onclick=()=>down(`图片任务单-${S.kw1}.md`,boardMd(),'text/markdown;charset=utf-8');
+  $('expHtml').onclick=()=>down(`配图骨架-${S.kw1}.html`,htmlSkeleton(),'text/html;charset=utf-8');
+  $('copyMd').onclick=copyMd;
+}
+load();bind();S.board=S.board&&S.board.length?S.board:makeBoard();setStep(S.step||1);refresh();
+</script>
+</body>
+</html>
