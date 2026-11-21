@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>第 01 篇，洗烘一体 vs 洗烘套装，索引 Index Ink</title>
+<link rel="stylesheet" href="_kit/xhs.css"><script src="_kit/xhs.js"></script>
+<style>
+:root{
+  --paper:#F4F5F3; --dot:#D6DBD8; --ink:#16201F; --ink2:#485452; --gray:#6E7A77; --line:#CFD6D2;
+  --accent:#E2592A; --accent2:#FBE7DE;
+}
+body{font-family:var(--sans)}
+.label{font-size:var(--label);line-height:1.4}
+
+/* 封面：墨底巨字 */
+.cover{background:#15201E}
+.cover .no{position:absolute;left:var(--m);top:96px;font:600 42px var(--sans);letter-spacing:4px;color:#9FB0AB}
+.cover .kick{position:absolute;right:var(--m);top:96px;font:600 42px var(--sans);letter-spacing:4px;color:#9FB0AB}
+.cover .big{position:absolute;left:60px;top:170px;font:900 470px/0.9 var(--latin);color:#F4F5F3;letter-spacing:-24px}
+.cover .big i{font-style:normal;color:var(--accent)}
+.cover .t1{position:absolute;left:var(--m);top:660px;font:900 92px/1.1 var(--sans);color:#F4F5F3}
+.cover .t2{position:absolute;left:var(--m);top:772px;font:500 46px/1.3 var(--sans);color:#C3CFCA}
+.cover .bar{position:absolute;left:var(--m);right:var(--m);top:880px;height:4px;background:#3B4B47}
+.cover .prod{position:absolute;right:70px;bottom:160px;width:520px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.5))}
+.cover .hnt{position:absolute;left:var(--m);bottom:160px;width:520px;font:600 42px/1.45 var(--sans);color:var(--accent)}
+
+/* 内页通用：纸底编号表 */
+.inner{background:var(--paper)}
+.inner .hd{position:absolute;left:var(--m);top:96px;font:600 42px var(--sans);letter-spacing:4px;color:var(--gray)}
+.inner .num{position:absolute;left:56px;top:160px;font:900 250px/1 var(--latin);color:var(--ink);letter-spacing:-16px}
+.inner .num.check{font-family:var(--sans);color:var(--accent)}
+.inner .numsub{position:absolute;left:var(--m);top:410px;font:900 50px/1.2 var(--sans);color:var(--ink);width:960px}
+.inner .rows{position:absolute;left:var(--m);right:var(--m);top:560px}
+.inner .row{display:flex;align-items:center;border-top:2px solid var(--ink);min-height:118px;font-size:var(--body)}
+.inner .row:last-child{border-bottom:2px solid var(--ink)}
+.inner .idx{font:800 44px var(--latin);width:100px;color:var(--accent);flex:none}
+.inner .lbl{font-weight:700;width:430px;flex:none}
+.inner .val{color:var(--ink2);flex:1;font-size:42px}
+.inner .stack{flex:1}
+.inner .stack .lbl{width:auto;display:block}
+.inner .stack .val{font-size:42px;margin-top:8px;display:block}
+.inner .tag{position:absolute;left:var(--m);bottom:150px;background:var(--accent);color:#fff;font:700 42px var(--sans);padding:18px 30px;border-radius:6px}
+.inner .foot{position:absolute;left:var(--m);bottom:64px;font:400 32px var(--sans);color:var(--gray)}
+
+/* 结论页三行更高 */
+.tall .row{min-height:190px}
+
+/* 价格页 */
+.price .row{min-height:130px}
+.price .pname{flex:1;font-size:42px;font-weight:700}
+.price .ptype{width:180px;flex:none;font-size:42px;color:var(--ink2)}
+.price .pcost{width:220px;flex:none;text-align:right;font:800 46px var(--latin);color:var(--accent)}
+.price .thead{display:flex;border-top:4px solid var(--ink);border-bottom:2px solid var(--ink);padding:14px 0;font:600 32px var(--sans);color:var(--gray)}
+.price .thead .idx{color:var(--gray)}
+.price .thead .pcost{color:var(--gray)}
+.price .note{position:absolute;left:var(--m);right:var(--m);top:1290px;background:var(--accent2);padding:24px 30px;font:500 42px/1.45 var(--sans);color:var(--ink)}
+
+/* 避坑页 */
+.trap .shot{position:absolute;left:171px;top:545px;width:900px}
+.trap .box{position:absolute;left:var(--m);right:var(--m);top:1360px;background:var(--accent2);border-left:8px solid var(--accent);padding:22px 30px;font:600 42px/1.45 var(--sans);color:var(--ink)}
+</style></head><body>
+<main class="xhs-deck">
+
+<!-- 01 封面 -->
+<section class="xhs-page cover" data-pageno="off">
+  <div class="no">家电选购避坑 / 01</div>
+  <div class="kick">洗烘一体 vs 套装</div>
+  <div class="big">6<i>.</i></div>
+  <div class="t1">别买错</div>
+  <div class="t2">一张图说清 6 项关键差别</div>
+  <div class="bar"></div>
+  <img class="prod" src="assets/product.png" alt="商品主图">
+  <div class="hnt">注意：标题写洗烘一体<br>主图却写“不带烘干”</div>
+</section>
+
+<!-- 02 结论 -->
+<section class="xhs-page inner tall">
+  <div class="hd">先看你自己是哪类</div>
+  <div class="num">3</div>
+  <div class="numsub">三句话给结论<br>不用翻到底</div>
+  <div class="rows">
+    <div class="row"><span class="idx">01</span><div class="stack"><span class="lbl">一人住 / 阳台小 / 一周洗两三次</span><span class="val">洗烘一体够用，一个机位，烘干慢点能接受</span></div></div>
+    <div class="row"><span class="idx">02</span><div class="stack"><span class="lbl">三口人 / 有娃 / 常年阴雨潮湿</span><span class="val">直接上洗烘套装，洗烘对等，不用分两次烘</span></div></div>
+    <div class="row"><span class="idx">03</span><div class="stack"><span class="lbl">预算卡在 4000 以内</span><span class="val">买一体，别硬上套装，这个价位套装多是入门机</span></div></div>
+  </div>
+  <div class="foot">往下翻：6 项差别逐条拆</div>
+</section>
+
+<!-- 03 参数对比 -->
+<section class="xhs-page inner">
+  <div class="hd">6 项差别，逐条对比</div>
+  <div class="num">6</div>
+  <div class="numsub">差的不是钱<br>是烘干容量和绒毛</div>
+  <div class="rows">
+    <div class="row"><span class="idx">01</span><span class="lbl">烘干容量</span><span class="val">一体 6-7kg ≠ 洗 10kg</span></div>
+    <div class="row"><span class="idx">02</span><span class="lbl">烘干方式</span><span class="val">认准“热泵”两个字</span></div>
+    <div class="row"><span class="idx">03</span><span class="lbl">绒毛处理</span><span class="val">套装独立、更干净</span></div>
+    <div class="row"><span class="idx">04</span><span class="lbl">占地</span><span class="val">一体省空间</span></div>
+    <div class="row"><span class="idx">05</span><span class="lbl">单次时长</span><span class="val">一体洗满要分两次烘</span></div>
+    <div class="row"><span class="idx">06</span><span class="lbl">预算</span><span class="val">4000 内优先一体</span></div>
+  </div>
+  <div class="tag">收藏这张，买前对照</div>
+  <div class="foot">参数以官方页为准，具体以型号参数页为准</div>
+</section>
+
+<!-- 04 真实价格 -->
+<section class="xhs-page inner price">
+  <div class="hd">在售机型，当天到手价</div>
+  <div class="num">5</div>
+  <div class="numsub">同是洗烘一体<br>差价在热泵和做工</div>
+  <div class="rows">
+    <div class="thead"><span class="idx">#</span><span class="pname">在售机型</span><span class="ptype">类型</span><span class="pcost">到手价</span></div>
+    <div class="row"><span class="idx">01</span><span class="pname">美的 洗烘一体机</span><span class="ptype">滚筒</span><span class="pcost">¥1326</span></div>
+    <div class="row"><span class="idx">02</span><span class="pname">小天鹅 热泵洗烘一体</span><span class="ptype">滚筒</span><span class="pcost">¥1606</span></div>
+    <div class="row"><span class="idx">03</span><span class="pname">海尔 洗烘一体机</span><span class="ptype">滚筒</span><span class="pcost">¥2098</span></div>
+    <div class="row"><span class="idx">04</span><span class="pname">美的 洗烘一体机</span><span class="ptype">滚筒</span><span class="pcost">¥1499</span></div>
+    <div class="row"><span class="idx">05</span><span class="pname">米家 洗烘一体机</span><span class="ptype">滚筒</span><span class="pcost">¥5099</span></div>
+  </div>
+  <div class="note">① 价格含补贴/券，以你点开那天为准<br>② 同是热泵，差价在做工和洗净比<br>③ 认准参数页的“热泵式”，别看标题</div>
+  <div class="foot">价格非实时，买前当天复核</div>
+</section>
+
+<!-- 05 清单 -->
+<section class="xhs-page inner">
+  <div class="hd">存这张图就够了</div>
+  <div class="num check">✓</div>
+  <div class="numsub">选洗烘，照这 6 条对一遍</div>
+  <div class="rows">
+    <div class="row"><span class="idx">01</span><span class="val">烘干容量 ≠ 洗涤容量，一体多为 6-7kg</span></div>
+    <div class="row"><span class="idx">02</span><span class="val">认准热泵：冷凝费电伤衣，2026 别碰</span></div>
+    <div class="row"><span class="idx">03</span><span class="val">烘满一桶约 2 小时，别信“洗完就穿”</span></div>
+    <div class="row"><span class="idx">04</span><span class="val">绒毛：一体清风道，套装清滤网</span></div>
+    <div class="row"><span class="idx">05</span><span class="val">先量尺寸：一体 60cm 宽，叠放约 1.8m</span></div>
+    <div class="row"><span class="idx">06</span><span class="val">有位置、三口人、朝北阳台 → 套装</span></div>
+  </div>
+  <div class="tag">转给正在纠结洗烘怎么选的朋友</div>
+  <div class="foot">参数以官方页为准</div>
+</section>
+
+<!-- 06 真实坑 -->
+<section class="xhs-page inner trap">
+  <div class="hd">一个真实的坑</div>
+  <div class="num">1</div>
+  <div class="numsub">标题写“洗烘一体”<br>主图却标“不带烘干”</div>
+  <img class="shot" src="assets/product.png" alt="商品主图">
+  <div class="box">标题写“洗烘一体”，主图却标“不带烘干”。<br>买前点开主图看清楚，别被标题带偏。</div>
+  <div class="foot">仅作选购举例，非推荐特定店铺</div>
+</section>
+
+</main>
+<script>XHS.number(6)</script>
+</body></html>

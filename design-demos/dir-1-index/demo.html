@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>方向一 · 索引</title>
+<link rel="stylesheet" href="_kit/xhs.css"><script src="_kit/xhs.js"></script>
+<style>
+:root{
+  --paper:#F4F5F3; --dot:#D6DBD8; --ink:#16201F; --ink2:#485452; --gray:#6E7A77; --line:#CFD6D2;
+  --accent:#E2592A; --accent2:#FBE7DE;
+}
+body{font-family:var(--sans)}
+/* 封面：墨底巨字 */
+.cover{background:#15201E}
+.cover .no{position:absolute;left:var(--m);top:96px;font:700 34px var(--latin);letter-spacing:6px;color:#9FB0AB}
+.cover .kick{position:absolute;right:var(--m);top:96px;font:600 34px var(--sans);letter-spacing:4px;color:#9FB0AB}
+.cover .big{position:absolute;left:60px;top:170px;font:900 470px/0.9 var(--latin);color:#F4F5F3;letter-spacing:-24px}
+.cover .big i{font-style:normal;color:var(--accent)}
+.cover .t1{position:absolute;left:var(--m);top:660px;font:900 92px/1.1 var(--sans);color:#F4F5F3}
+.cover .t2{position:absolute;left:var(--m);top:772px;font:500 46px/1.3 var(--sans);color:#C3CFCA}
+.cover .bar{position:absolute;left:var(--m);right:var(--m);top:880px;height:4px;background:#3B4B47}
+.cover .prod{position:absolute;right:70px;bottom:120px;width:520px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.5))}
+.cover .hnt{position:absolute;left:var(--m);bottom:120px;width:500px;font:600 34px/1.5 var(--sans);color:var(--accent)}
+.cover .foot{position:absolute;left:var(--m);bottom:56px;font:400 32px var(--sans);color:#8FA09B}
+/* 内页：纸底编号表 */
+.inner .hd{position:absolute;left:var(--m);top:96px;font:600 34px var(--sans);letter-spacing:4px;color:var(--gray)}
+.inner .num{position:absolute;left:56px;top:160px;font:900 250px/1 var(--latin);color:var(--ink);letter-spacing:-16px}
+.inner .numsub{position:absolute;left:var(--m);top:410px;font:900 50px/1.2 var(--sans);color:var(--ink);width:900px}
+.inner .rows{position:absolute;left:var(--m);right:var(--m);top:560px}
+.inner .row{display:flex;align-items:center;border-top:2px solid var(--ink);min-height:118px;font-size:var(--body)}
+.inner .row:last-child{border-bottom:2px solid var(--ink)}
+.inner .idx{font:800 44px var(--latin);width:100px;color:var(--accent)}
+.inner .lbl{font-weight:700;width:430px}
+.inner .val{color:var(--ink2);flex:1;font-size:38px}
+.inner .tag{position:absolute;left:var(--m);bottom:150px;background:var(--accent);color:#fff;font:700 34px var(--sans);padding:18px 30px;border-radius:6px}
+.inner .foot{position:absolute;left:var(--m);bottom:64px;font:400 32px var(--sans);color:var(--gray)}
+</style></head><body>
+<main class="xhs-deck two">
+<!-- 封面 -->
+<section class="xhs-page cover" data-pageno="off">
+  <div class="no">家电选购避坑 / 01</div>
+  <div class="kick">洗烘一体 vs 套装</div>
+  <div class="big">6<i>.</i></div>
+  <div class="t1">别买错</div>
+  <div class="t2">一张图说清 6 项关键差别</div>
+  <div class="bar"></div>
+  <img class="prod" src="assets/product.png" alt="真实商品主图">
+  <div class="hnt">注意：标题写洗烘一体<br>主图却写"不带烘干"</div>
+  <div class="foot">商品图截自天猫在售页 2026.11.16</div>
+</section>
+<!-- 内页：参数对比 -->
+<section class="xhs-page inner">
+  <div class="hd">6 项差别 · 逐条对比</div>
+  <div class="num">6</div>
+  <div class="numsub">差的不是钱<br>是烘干容量和绒毛</div>
+  <div class="rows">
+    <div class="row"><span class="idx">01</span><span class="lbl">烘干容量</span><span class="val">一体 6-7kg ≠ 洗 10kg</span></div>
+    <div class="row"><span class="idx">02</span><span class="lbl">烘干方式</span><span class="val">认准"热泵"两个字</span></div>
+    <div class="row"><span class="idx">03</span><span class="lbl">绒毛处理</span><span class="val">套装独立、更干净</span></div>
+    <div class="row"><span class="idx">04</span><span class="lbl">占地</span><span class="val">一体省空间</span></div>
+    <div class="row"><span class="idx">05</span><span class="lbl">单次时长</span><span class="val">一体洗满要分两次烘</span></div>
+    <div class="row"><span class="idx">06</span><span class="lbl">预算</span><span class="val">4000 内优先一体</span></div>
+  </div>
+  <div class="tag">收藏这张，买前对照</div>
+  <div class="foot">参数以官方页为准 · 场景示意非实拍</div>
+</section>
+</main>
+<script>XHS.number(6)</script>
+</body></html>

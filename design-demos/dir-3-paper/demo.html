@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>方向三 · 日报</title>
+<link rel="stylesheet" href="_kit/xhs.css"><script src="_kit/xhs.js"></script>
+<style>
+:root{--paper:#F3F0E6;--ink:#201D17;--ink2:#4A453B;--gray:#7A7365;--line:#B9B1A0}
+body{font-family:var(--serif)}
+.mast{position:absolute;left:var(--m);right:var(--m);top:80px;text-align:center;border-bottom:5px double var(--ink);padding-bottom:18px}
+.mast .name{font:900 66px var(--serif);letter-spacing:14px;color:var(--ink)}
+.mast .meta{font:400 32px var(--serif);letter-spacing:3px;color:var(--gray);margin-top:10px}
+.hl{background:linear-gradient(transparent 58%,#FFE14D 58%,#FFE14D 92%,transparent 92%)}
+.cover .head{position:absolute;left:var(--m);right:var(--m);top:250px;font:900 92px/1.22 var(--serif);color:var(--ink);text-align:center}
+.cover .deck{position:absolute;left:var(--m);right:var(--m);top:540px;font:500 40px/1.5 var(--serif);color:var(--ink2);text-align:center}
+.cover .cols{position:absolute;left:var(--m);right:var(--m);top:730px;height:430px;column-count:2;column-gap:44px;column-rule:2px solid var(--line);font:400 32px/1.75 var(--serif);color:var(--ink2);text-align:justify}
+.cover .cols p{margin-bottom:16px}
+.cover .proof{position:absolute;left:var(--m);bottom:110px;width:440px;height:250px;overflow:hidden;border:3px solid var(--ink)}
+.cover .proof img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15)}
+.cover .cap{position:absolute;left:500px;bottom:130px;width:600px;font:400 28px/1.5 var(--serif);color:var(--gray)}
+.inner .big{position:absolute;left:var(--m);top:230px;font:900 300px/1 var(--latin);color:var(--ink)}
+.inner .biglab{position:absolute;left:var(--m);top:540px;font:900 58px var(--serif);color:var(--ink)}
+.inner .cols2{position:absolute;left:var(--m);right:var(--m);top:660px;bottom:180px;column-count:2;column-gap:48px;column-rule:2px solid var(--line);font:400 42px/1.65 var(--serif);color:var(--ink2)}
+.inner .cols2 .item{margin-bottom:26px;break-inside:avoid}
+.inner .cols2 b{font:900 40px var(--serif);color:var(--ink)}
+.inner .foot{position:absolute;left:var(--m);bottom:60px;font:400 32px var(--serif);color:var(--gray)}
+</style></head><body>
+<main class="xhs-deck two">
+<section class="xhs-page cover" data-pageno="off">
+  <div class="mast"><div class="name">家电选购报</div><div class="meta">第 01 期 · 洗烘专刊 · 2026.11.16</div></div>
+  <div class="head">标题写着洗烘一体<br>主图却写"<span class="hl">不带烘干</span>"</div>
+  <div class="deck">点进在售页，发现的一处真实坑</div>
+  <div class="cols">
+    <p>在天猫搜"洗烘一体机"，点开一款标题写着洗烘一体的机器，商品主图右上角明明白白四个字：不带烘干。</p>
+    <p>标题与实物对不上，在洗衣机区并不少见。买之前，参数页比标题可靠。</p>
+    <p>这篇不讲虚的：三类人各买谁、六项参数逐条拆、当天在售价格，一次给清。</p>
+    <p>先看结论，再对参数，最后对着价格表下单。</p>
+  </div>
+  <div class="proof"><img src="assets/product.png" alt="真实商品主图"></div>
+  <div class="cap">证据图：天猫在售页主图，"12公斤｜不带烘干"字样清晰可见（截图 2026.11.16）。</div>
+</section>
+<section class="xhs-page inner">
+  <div class="mast"><div class="name">家电选购报</div><div class="meta">参数版 · 六项差别</div></div>
+  <div class="big">6</div>
+  <div class="biglab">项差别，逐条拆</div>
+  <div class="cols2">
+    <div class="item"><b>01 烘干容量</b><br>一体标 10kg 是洗涤容量，烘干通常只有 6-7kg。</div>
+    <div class="item"><b>02 烘干方式</b><br>认准"热泵"两个字；冷凝温度高、耗电。</div>
+    <div class="item"><b>03 绒毛</b><br>套装独立烘干，绒毛更少。</div>
+    <div class="item"><b>04 占地</b><br>一体更省阳台空间。</div>
+    <div class="item"><b>05 时长</b><br>一体洗满需分两次烘。</div>
+    <div class="item"><b>06 预算</b><br>4000 内优先一体；常洗床品上套装。</div>
+  </div>
+  <div class="foot">参数以官方页为准 · 收藏本页，买前对照</div>
+</section>
+</main>
+<script>XHS.number(6)</script>
+</body></html>
